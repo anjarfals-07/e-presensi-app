@@ -18,7 +18,7 @@
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-body">
-                            <form action="/presensi/cetaklaporan" target="_blank" method="POST">
+                            <form action="/presensi/cetaklaporan" id="frmLaporan" target="_blank" method="POST">
                                 @csrf
                                 <div class="row">
                                     <div class="col-md-12">
@@ -116,3 +116,45 @@
         </div>
     </div>
 @endsection
+@push('myscript')
+    <script>
+        $(function() {
+            $("frmLaporan").submit(function(e) {
+                var bulan = $("#bulan").val();
+                var tahun = $("#tahun").val();
+                var nik = $("#nik").val();
+                if (bulan == "") {
+                    Swal.fire({
+                        title: 'Bulan Harus Diisi !',
+                        text: status[1],
+                        icon: 'warning',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        $("#bulan").focus();
+                    });
+                    return false;
+                } else if (tahun == "") {
+                    Swal.fire({
+                        title: 'Tahun Harus Diisi !',
+                        text: status[1],
+                        icon: 'warning',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        $("#tahun").focus();
+                    });
+                    return false;
+                } else if (nik == "") {
+                    Swal.fire({
+                        title: 'Nik Harus Diisi !',
+                        text: status[1],
+                        icon: 'warning',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        $("#nik").focus();
+                    });
+                    return false;
+                }
+            })
+        })
+    </script>
+@endpush

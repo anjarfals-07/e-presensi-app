@@ -1,6 +1,21 @@
 @extends('layout.presensi')
 @section('content')
+    <style>
+        .signout {
+            position: absolute;
+            color: white;
+            font-size: 35px;
+            right: 8px;
+        }
+
+        .logout::hover {
+            color: white;
+        }
+    </style>
     <div class="section" id="user-section">
+        <a href="/proseslogout" class="signout">
+            <ion-icon name="log-out-outline"></ion-icon>
+        </a>
         <div id="user-detail">
             <div class="avatar">
                 @if (!empty(Auth::guard('karyawan')->user()->foto))

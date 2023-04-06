@@ -276,6 +276,8 @@ class PresensiController extends Controller
         $nik = $request->nik;
         $bulan = $request->bulan;
         $tahun = $request->tahun;
+        $jam_kantor = DB::table('konfigurasi_jam')->where('id', 1)->first();
+
         $namaBulan = ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
         $karyawan = DB::table('karyawan')->where('nik', $nik)
             ->join('departemen', 'karyawan.kode_dept', '=', 'departemen.kode_dept')
@@ -286,7 +288,16 @@ class PresensiController extends Controller
             ->whereRaw('YEAR(tgl_presensi)="' . $tahun . '"')
             ->orderBy('tgl_presensi')
             ->get();
-        $jam_kantor = DB::table('konfigurasi_jam')->where('id', 1)->first();
+        // Jika Tombol Export
+        if (isset($_POST['exportexcel'])) {
+            $time = date('d-M-Y H:i:s');
+            //Fungsi Header dengan mengirimkan data raw data excel
+            header("Content-type: application/vnd-ms-excel");
+            //Mendefinisikan nama file export excel "tes.xls"
+            header("Content-Disposition: attachment; filename=laporan presensi karyawan $time.xls");
+            return view('presensi.cetaklaporanexcel', compact('bulan', 'tahun', 'namaBulan', 'karyawan', 'presensi', 'jam_kantor'));
+        }
+
         return view('presensi.cetaklaporan', compact('bulan', 'tahun', 'namaBulan', 'karyawan', 'presensi', 'jam_kantor'));
     }
 
@@ -296,9 +307,11 @@ class PresensiController extends Controller
         return view('presensi.rekap', compact('namaBulan'));
     }
 
-    public function CETAKREKAP(Request $request)
+    public function cetakrekap(Request $request)
     {
         $jam_kantor = DB::table('konfigurasi_jam')->where('id', 1)->first();
+        $namaBulan = ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+
         $bulan = $request->bulan;
         $tahun = $request->tahun;
         $rekap = DB::table('presensi')
@@ -339,7 +352,13 @@ class PresensiController extends Controller
             ->whereRaw('YEAR(tgl_presensi)="' . $tahun . '"')
             ->groupByRaw('presensi.nik, nama_lengkap')
             ->get();
-        $namaBulan = ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+        if (isset($_POST['exportexcel'])) {
+            $time = date('d-M-Y H:i:s');
+            //Fungsi Header dengan mengirimkan data raw data excel
+            header("Content-type: application/vnd-ms-excel");
+            //Mendefinisikan nama file export excel "tes.xls"
+            header("Content-Disposition: attachment; filename=laporan presensi karyawan $time.xls");
+        }
 
         // dd($rekap);
         return view('presensi.cetakrekap', compact('bulan', 'tahun', 'namaBulan', 'rekap', 'jam_kantor'));
