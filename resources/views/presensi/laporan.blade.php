@@ -119,7 +119,7 @@
 @push('myscript')
     <script>
         $(function() {
-            $("frmLaporan").submit(function(e) {
+            $("#frmLaporan").submit(function(e) {
                 var bulan = $("#bulan").val();
                 var tahun = $("#tahun").val();
                 var nik = $("#nik").val();
