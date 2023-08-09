@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class KonfigurasiController extends Controller
 {
@@ -53,6 +55,57 @@ class KonfigurasiController extends Controller
             return Redirect::back()->with(['success' => 'Data Jam Kantor Berhasil Di Update']);
         } else {
             return Redirect::back()->with(['warning' => 'Data Jam Kantor Gagal Di Update']);
+        }
+    }
+
+
+    // Ubah User
+    public function passworduser()
+    {
+        $pass_user = DB::table('users')->where('id', 1)->first();
+        return view('konfigurasi.passworduser', compact('pass_user'));
+    }
+
+    // public function updatepassworduser(Request $request)
+    // {
+    //     $name = $request->name;
+    //     $email = $request->email;
+    //     $password = $request->password;
+
+
+    //     $update = DB::table('users')->where('id', 1)->update([
+    //         'name' => $name,
+    //         'email' => $email,
+    //         'password'  => $password
+    //     ]);
+
+    //     if ($update) {
+    //         return Redirect::back()->with(['success' => 'Data Password Admin Berhasil Di Update']);
+    //     } else {
+    //         return Redirect::back()->with(['warning' => 'Data Password Admin Gagal Di Update']);
+    //     }
+    // }
+
+    public function updatepassworduser(Request $request)
+    {
+        $id = Auth::guard('user')->user()->id;
+        $name = $request->name;
+        $email = $request->email;
+        $password = Hash::make($request->password);
+        $pass_user = DB::table('users')->where('id', $id)->first();
+
+        $data = [
+            'name'  => $name,
+            'email'  => $email,
+            'password'  => $password
+        ];
+
+
+        $update =   DB::table('users')->where('id', $id)->update($data);
+        if ($update) {
+            return Redirect::back()->with(['success' => 'Data Berhasil Di Update']);
+        } else {
+            return Redirect::back()->with(['error' => 'Data Gagal Di Update']);
         }
     }
 }

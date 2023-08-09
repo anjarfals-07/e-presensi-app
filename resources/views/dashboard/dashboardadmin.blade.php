@@ -135,7 +135,7 @@
                                 </div>
                                 <div class="col">
                                     <div class="font-weight-medium">
-                                        {{ $rekapPresensi->jmltelat }}
+                                        {{ $rekapPresensi->jmltelat !== null ? $rekapPresensi->jmltelat : 0 }}
                                     </div>
                                     <div class="text-muted">
                                         Total Karyawan Terlambat

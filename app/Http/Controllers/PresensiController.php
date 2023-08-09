@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
+use PDF;
 
 class PresensiController extends Controller
 {
@@ -140,9 +141,8 @@ class PresensiController extends Controller
 
         if (empty($request->password)) {
             $data = [
-                'nama_lengkap'  => $nama_lengkap,
-                'no_hp'  => $no_hp,
-                'foto'  => $foto
+                'name'  => $name,
+                'email'  => $email
             ];
         } else {
             $data = [
@@ -297,6 +297,13 @@ class PresensiController extends Controller
             header("Content-Disposition: attachment; filename=laporan presensi karyawan $time.xls");
             return view('presensi.cetaklaporanexcel', compact('bulan', 'tahun', 'namaBulan', 'karyawan', 'presensi', 'jam_kantor'));
         }
+
+        // if (isset($_POST['cetak'])) {
+        //     $pdf = PDF::loadView('presensi.cetaklaporan', compact('bulan', 'tahun', 'namaBulan', 'karyawan', 'presensi', 'jam_kantor'));
+        //     // $pdf->setPaper('A4', 'portrait');
+        //     return $pdf->download('lap_presensi.pdf');
+        // }
+
 
         return view('presensi.cetaklaporan', compact('bulan', 'tahun', 'namaBulan', 'karyawan', 'presensi', 'jam_kantor'));
     }

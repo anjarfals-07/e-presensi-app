@@ -59,6 +59,7 @@ class DashboardController extends Controller
     public function dashboardadmin()
     {
         $jam_kantor = DB::table('konfigurasi_jam')->where('id', 1)->first();
+        $jam_kantor = DB::table('konfigurasi_jam')->where('id', 1)->first();
 
         $tanggalSekarang = date('Y-m-d');
         $rekapPresensi = DB::table('presensi')

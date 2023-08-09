@@ -135,8 +135,9 @@
 
         <div id="rekappresensi">
             <h3>Rekap Absensi Bulan
-                {{ \Carbon\Carbon::parse($namaBulan[$bulan])->translatedFormat('F') }}
-                {{-- {{ $namaBulan[$bulan] }}  --}}
+                {{-- {{ \Carbon\Carbon::parse($namaBulan[$bulan])->translatedFormat('F') }} --}}
+                {{-- {{ \Carbon\Carbon::parse($namaBulan[$bulan])->translatedFormat('F') }} --}}
+                {{ $namaBulan[$bulan] }}
                 Tahun {{ $tahun }}</h3>
             <div class="row">
                 <div class="col-3">
@@ -144,7 +145,7 @@
                         <div class="card-body text-center" style="padding: 12px 12px !important">
                             <span
                                 class="badge bg-danger"style="position: absolute; top:5px; right:8px; font-size: 0.6rem; z-index:999">
-                                {{ $rekapPresensi->jmlhadir }}
+                                {{ $rekapPresensi->jmlhadir !== null ? $rekapPresensi->jmlhadir : 0 }}
                             </span>
                             <ion-icon name="accessibility-outline" style="font-size: 1.6rem;" class="text-primary mb-1">
                             </ion-icon>
@@ -158,7 +159,7 @@
                         <div class="card-body text-center" style="padding: 12px 12px !important">
                             <span
                                 class="badge bg-danger"style="position: absolute; top:5px; right:8px; font-size: 0.6rem; z-index:999">
-                                {{ $rekapizin->jmlizin }}
+                                {{ $rekapizin->jmlizin !== null ? $rekapizin->jmlizin : 0 }}
                             </span>
                             <ion-icon name="newspaper-outline" style="font-size: 1.6rem;" class="text-success mb-1">
                             </ion-icon>
@@ -172,7 +173,7 @@
                         <div class="card-body text-center" style="padding: 12px 12px !important">
                             <span
                                 class="badge bg-danger"style="position: absolute; top:5px; right:8px; font-size: 0.6rem; z-index:999">
-                                {{ $rekapizin->jmlsakit }}
+                                {{ $rekapizin->jmlsakit !== null ? $rekapizin->jmlsakit : 0 }}
                             </span>
                             <ion-icon name="medkit-outline" style="font-size: 1.6rem;" class="text-warning mb-1">
                             </ion-icon>
@@ -186,7 +187,7 @@
                         <div class="card-body text-center" style="padding: 12px 12px !important">
                             <span
                                 class="badge bg-danger"style="position: absolute; top:5px; right:8px; font-size: 0.6rem; z-index:999">
-                                {{ $rekapPresensi->jmltelat }}
+                                {{ $rekapPresensi->jmltelat !== null ? $rekapPresensi->jmltelat : 0 }}
                             </span>
                             <ion-icon name="megaphone-outline" style="font-size: 1.6rem;" class="text-danger mb-1">
                             </ion-icon>

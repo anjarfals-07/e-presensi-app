@@ -67,6 +67,25 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
     <!-- Make sure you put this AFTER Leaflet's CSS -->
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
+    <script>
+        $(document).ready(function() {
+            $(".toggle-password").click(function() {
+                var passwordInput = $($(this).siblings(".password-input"));
+                var icon = $(this);
+                if (passwordInput.attr("type") == "password") {
+                    passwordInput.attr("type", "text");
+                    // icon.removeClass("icon icon-tabler icon-tabler-eye-checkx").addClass("fa-eye-slash");
+                } else {
+                    passwordInput.attr("type", "password");
+                    // icon.removeClass("icon icon-tabler icon-tabler-eye-checkx").addClass(
+                    //     "fa-eye-slash");
+                }
+            });
+        })
+    </script>
     @stack('myscript')
 </body>
 

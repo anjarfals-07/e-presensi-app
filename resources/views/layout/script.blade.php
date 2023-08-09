@@ -74,4 +74,5 @@
      }, 3000);
  </script>
 
+
  @stack('myscript')

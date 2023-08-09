@@ -164,9 +164,13 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
 
+
+
         /*
          * Package Service Providers...
          */
+        Barryvdh\DomPDF\ServiceProvider::class,
+        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -176,6 +180,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+
 
     ],
 
@@ -190,8 +195,14 @@ return [
     |
     */
 
+    // 'aliases' => Facade::defaultAliases()->merge([
+    //     'PDF' => Barryvdh\DomPDF\Facade::class,
+    // ])->toArray(),
     'aliases' => Facade::defaultAliases()->merge([
-        // ...
+
+        'PDF' => Barryvdh\DomPDF\Facade::class,
+
+
     ])->toArray(),
 
 ];

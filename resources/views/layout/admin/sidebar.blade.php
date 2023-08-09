@@ -207,7 +207,9 @@
           <div class="collapse navbar-collapse" id="sidebar-menu">
               <ul class="navbar-nav pt-lg-3">
                   <li class="nav-item">
-                      <a class="nav-link" href="./">
+                      {{-- <a class="nav-link" href="./"> --}}
+                      <a class="nav-link {{ request()->is(['admin-login/dashboardadmin']) ? 'show' : '' }}"
+                          href="/admin-login/dashboardadmin">
                           <span class="nav-link-icon d-md-none d-lg-inline-block">
                               <!-- Download SVG icon from http://tabler-icons.io/i/home -->
                               <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
@@ -380,6 +382,10 @@
                                   <a class="dropdown-item {{ request()->is(['konfigurasi/jamkantor']) ? 'active' : '' }}"
                                       href="/konfigurasi/jamkantor">
                                       Jam Kantor
+                                  </a>
+                                  <a class="dropdown-item {{ request()->is(['konfigurasi/passworduser']) ? 'active' : '' }}"
+                                      href="/konfigurasi/passworduser">
+                                      Change Password
                                   </a>
                               </div>
                           </div>

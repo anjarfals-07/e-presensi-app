@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>A4</title>
+    <title>Laporan View</title>
 
     <!-- Normalize or reset CSS with your favorite library -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css">
@@ -15,7 +15,7 @@
     <!-- Set also "landscape" if you need -->
     <style>
         @page {
-            size: A4
+            size: A4;
         }
 
         #title {
@@ -25,7 +25,8 @@
         }
 
         .tablekaryawan {
-            margin-top: 30px;
+            margin-top: 20px;
+            font-size: 14px;
         }
 
         .tablekaryawan td {
@@ -36,44 +37,27 @@
             width: 100%;
             margin-top: 20px;
             border-collapse: collapse;
-            margin: 25px 0;
-            font-size: 0.9em;
-            font-family: sans-serif;
-            min-width: 400px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+
         }
 
-        .table-presensi thead tr {
-            background-color: #009879;
-            color: #ffffff;
-        }
-
-        .table-presensi th,
-        .table-presensi td {
-            border: 1px solid #009879;
+        .table-presensi tr th {
+            background-color: #9d9e9e;
+            border: 1px solid #000;
             padding: 8px;
+            color: #000;
+            font-size: 12px;
         }
 
-        .table-presensi tbody tr {
-            border-bottom: 1px solid #dddddd;
-        }
+        .table-presensi tr td {
+            border: 1px solid #000;
+            color: #000;
+            font-size: 12px;
 
-        .table-presensi tbody tr:nth-of-type(even) {
-            background-color: #f3f3f3;
-        }
-
-        .table-presensi tbody tr:last-of-type {
-            border: 1px solid #009879;
-        }
-
-        .table-presensi tbody tr.active-row {
-            font-weight: bold;
-            color: #009879;
         }
 
         .foto {
-            width: 40px;
-            height: 40px;
+            width: 30px;
+            height: 30px;
         }
     </style>
 </head>
@@ -101,14 +85,13 @@
     <!-- Each sheet element should have the class "sheet" -->
     <!-- "padding-**mm" is optional: you can set 10, 15, 20 or 25 -->
     <section class="sheet padding-10mm">
-
         <!-- Write HTML just like a web page -->
         <table style="width: 100%">
             <tr>
                 <td style="text-align: center;">
-                    <img src="{{ asset('assets/img/logo-laporan.png') }}" width="80px" height="80px" alt="">
+                    <img src="{{ asset('assets/img/logo-laporan.png') }}" width="70px" height="80px" alt="">
                 </td>
-                <td style="text-align: center">
+                <td style="text-align: center; font-size: 12px">
                     <span id="title">LAPORAN PRESENSI KARYAWAN<br>
                         PERIODE {{ strtoupper($namaBulan[$bulan]) }} {{ $tahun }}<br>
                         PT. PIZZAHUT
@@ -124,7 +107,7 @@
                     @php
                         $path = Storage::url('uploads/karyawan/' . $karyawan->foto);
                     @endphp
-                    <img src="{{ url($path) }}" alt="" width="120px" height="150px">
+                    <img src="{{ url($path) }}" alt="" width="120px" height="130px">
                 </td>
             </tr>
             <tr>
@@ -154,66 +137,62 @@
             </tr>
         </table>
         <table class="table-presensi">
-            <thead>
+            <tr>
+                <th>No</th>
+                <th>Tanggal</th>
+                <th>Check In</th>
+                {{-- <th>Foto</th> --}}
+                <th>Check Out</th>
+                {{-- <th>Foto</th> --}}
+                <th>Keterangan</th>
+                <th>Total Jam Kerja</th>
+            </tr>
+            @foreach ($presensi as $item)
+                @php
+                    $path_in = Storage::url('uploads/absensi/' . $item->foto_in);
+                    $path_out = Storage::url('uploads/absensi/' . $item->foto_out);
+                    $jam_telat = selisih($jam_kantor->jam_masuk, $item->jam_in);
+                @endphp
                 <tr>
-                    <th>No</th>
-                    <th>Tanggal</th>
-                    <th>Check In</th>
-                    <th>Foto</th>
-                    <th>Check Out</th>
-                    <th>Foto</th>
-                    <th>Keterangan</th>
-                    <th>Total Jam Kerja</th>
+                    <td style="text-align: center">{{ $loop->iteration }}</td>
+                    <td>{{ date('d-m-Y', strtotime($item->tgl_presensi)) }}</td>
+                    <td>{{ $item->jam_in }}</td>
+                    {{-- <td style="text-align: center"><img src="{{ url($path_in) }}" alt="" class="foto">
+                    </td> --}}
+                    <td>{{ $item->jam_out != null ? $item->jam_out : 'Belum Absen' }}</td>
+                    {{-- <td style="text-align: center">
+                        @if ($item != null)
+                            <img src="{{ url($path_out) }}" alt="" class="foto">
+                        @else
+                            <img src="{{ asset('assets/img/no-photo.jpg') }}" alt="" class="foto">
+                        @endif
+                    </td> --}}
+
+                    @if ($item->jam_in > $jam_kantor->jam_masuk)
+                        <td style="background-color: red">Terlambat {{ $jam_telat }}</td>
+                    @else
+                        <td style="background-color: #fff">Tidak Terlambat</td>
+                    @endif
+
+                    <td>
+                        @if ($item->jam_out != null)
+                            @php
+                                $jml_jamkerja = selisih($item->jam_in, $item->jam_out);
+                                
+                            @endphp
+                        @else
+                            @php
+                                $jml_jamkerja = 0;
+                                
+                            @endphp
+                        @endif
+                        {{ $jml_jamkerja }} Jam
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                @foreach ($presensi as $item)
-                    @php
-                        $path_in = Storage::url('uploads/absensi/' . $item->foto_in);
-                        $path_out = Storage::url('uploads/absensi/' . $item->foto_out);
-                        $jam_telat = selisih($jam_kantor->jam_masuk, $item->jam_in);
-                    @endphp
-                    <tr>
-                        <td>{{ $loop->iteration }}</td>
-                        <td>{{ date('d-m-Y', strtotime($item->tgl_presensi)) }}</td>
-                        <td>{{ $item->jam_in }}</td>
-                        <td style="text-align: center"><img src="{{ url($path_in) }}" alt="" class="foto">
-                        </td>
-                        <td>{{ $item->jam_out != null ? $item->jam_out : 'Belum Absen' }}</td>
-                        <td style="text-align: center">
-                            @if ($item != null)
-                                <img src="{{ url($path_out) }}" alt="" class="foto">
-                            @else
-                                <img src="{{ asset('assets/img/no-photo.jpg') }}" alt="" class="foto">
-                            @endif
-                        </td>
-                        <td>
-                            @if ($item->jam_in > $jam_kantor->jam_masuk)
-                                Terlambat {{ $jam_telat }}
-                            @else
-                                Tidak Terlambat
-                            @endif
-                        </td>
-                        <td>
-                            @if ($item->jam_out != null)
-                                @php
-                                    $jml_jamkerja = selisih($item->jam_in, $item->jam_out);
-                                    
-                                @endphp
-                            @else
-                                @php
-                                    $jml_jamkerja = 0;
-                                    
-                                @endphp
-                            @endif
-                            {{ $jml_jamkerja }} Jam
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
+            @endforeach
         </table>
 
-        <table width="100%" style="margin-top: 100px">
+        <table width="100%" style="margin-top: 30px">
             <tr>
                 <td></td>
                 <td colspan="2" style="text-align: center;">Jakarta,
@@ -235,6 +214,7 @@
             </tr>
         </table>
     </section>
+
 
 </body>
 
